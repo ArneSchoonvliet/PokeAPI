@@ -58,7 +58,7 @@ namespace BLL.Authentication
                 UserName = credentials.Login,
                 Created = DateTime.UtcNow,
                 FirstName = credentials.FirstName,
-                LastName = credentials.LastName,
+                LastName = credentials.LastName
             };
 
             var result = await _userManager.CreateAsync(user, credentials.Password);

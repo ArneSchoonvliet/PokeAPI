@@ -1,17 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BLL.Authentication;
 using BLL.Authentication.Interfaces;
 using BLL.Authentication.Options;
 using BLL.Authentication.ViewModels;
+using BLL.Test.Helpers;
+using DAL.DbContext;
 using DAL.DbContext.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace BLL.Test
 {
@@ -24,7 +27,24 @@ namespace BLL.Test
 
         public AuthenticationManagerUnitTests()
         {
-            _manager = new AuthenticationManager(MockUserManager<User>(), MockSigninManager<User>(), StubJwtOptions(), new LoggerFactory());
+            var services = new ServiceCollection();
+
+            services.AddLogging();
+
+            services.AddEntityFramework()
+                .AddEntityFrameworkInMemoryDatabase()
+                .AddDbContext<PokeContext>(options => options.UseInMemoryDatabase());
+
+            services.AddIdentity<User, IdentityRole>()
+                 .AddEntityFrameworkStores<PokeContext>(); ;
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            var signinManager = serviceProvider.GetRequiredService<SignInManager<User>>();
+            userManager.CreateAsync(new User { UserName = "ErazerBrecht", FirstName = "Erazer", LastName = "Brecht" }).Wait();
+
+            _manager = new AuthenticationManager(userManager, signinManager, StubJwtOptions(), new LoggerFactory());
         }
 
         [TestMethod]
@@ -102,41 +122,41 @@ namespace BLL.Test
             await _manager.RegisterUser(credentials);
         }
 
+        [TestMethod]
+        [ExpectedUserActionException("User Creation Failed", "PasswordRequires")]
+        public async Task RegisterWithInvalidPasswordShouldThrowException()
+        {
+            // Arrange
+            var credentials = new RegisterViewModel
+            {
+                Login = "ErazerBrecht",
+                FirstName = "Erazer",
+                LastName = "Brecht",
+                Password = "Password"
+            };
+
+            // Act
+            await _manager.RegisterUser(credentials);
+        }
+
+        [TestMethod]
+        [ExpectedUserActionException("User Creation Failed", "DuplicateUserName")]
+        public async Task RegisterWithAlreadyExistingLoginShouldThrowException()
+        {
+            // Arrange
+            var credentials = new RegisterViewModel
+            {
+                Login = "ErazerBrecht",
+                FirstName = "Erazer",
+                LastName = "Brecht",
+                Password = "@Passw0rd"
+            };
+
+            // Act
+            await _manager.RegisterUser(credentials);
+        }
 
         #region Helpers
-        private static Mock<IUserStore<TUser>> MockUserStore<TUser>() where TUser : class
-        {
-            var store = new Mock<IUserStore<TUser>>();
-            return store;
-        }
-
-        private static UserManager<TUser> MockUserManager<TUser>() where TUser : class
-        {
-            IList<IUserValidator<TUser>> userValidators = new List<IUserValidator<TUser>>();
-            IList<IPasswordValidator<TUser>> passwordValidators = new List<IPasswordValidator<TUser>>();
-
-            var store = MockUserStore<TUser>();
-            userValidators.Add(new UserValidator<TUser>());
-            passwordValidators.Add(new PasswordValidator<TUser>());
-            var mgr = new Mock<UserManager<TUser>>(store.Object, null, null, userValidators, passwordValidators, null, null, null, null);
-            return mgr.Object;
-        }
-
-        private static SignInManager<TUser> MockSigninManager<TUser>() where TUser : class
-        {
-            var context = new Mock<HttpContext>();
-            var mock = 
-                new Mock<SignInManager<TUser>>(MockUserManager<TUser>(),
-                    new HttpContextAccessor { HttpContext = context.Object },
-                    new Mock<IUserClaimsPrincipalFactory<TUser>>().Object,
-                    null, null)
-                {
-                    CallBase = true
-                };
-
-            return mock.Object;
-        }
-
         private static IOptions<JwtIssuerOptions> StubJwtOptions()
         {
             return Options.Create(new JwtIssuerOptions
