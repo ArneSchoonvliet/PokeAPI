@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "src\DAL\DAL.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeAPI", "src\PokeAPI\PokeAPI.csproj", "{545B8336-C964-4BEB-8BF9-653E4BE78E29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.Test", "src\BLL.Test\BLL.Test.csproj", "{16247786-0F73-4786-BFE4-15AEAA36F08B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{304D193C-D39F-4D69-B499-879C69A3C3D5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL.Test", "test\BLL.Test\BLL.Test.csproj", "{D2EAF6D3-0194-4699-97A4-D94ABC75BCCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +31,15 @@ Global
 		{545B8336-C964-4BEB-8BF9-653E4BE78E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{545B8336-C964-4BEB-8BF9-653E4BE78E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{545B8336-C964-4BEB-8BF9-653E4BE78E29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16247786-0F73-4786-BFE4-15AEAA36F08B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16247786-0F73-4786-BFE4-15AEAA36F08B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16247786-0F73-4786-BFE4-15AEAA36F08B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16247786-0F73-4786-BFE4-15AEAA36F08B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2EAF6D3-0194-4699-97A4-D94ABC75BCCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2EAF6D3-0194-4699-97A4-D94ABC75BCCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2EAF6D3-0194-4699-97A4-D94ABC75BCCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2EAF6D3-0194-4699-97A4-D94ABC75BCCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D2EAF6D3-0194-4699-97A4-D94ABC75BCCF} = {304D193C-D39F-4D69-B499-879C69A3C3D5}
 	EndGlobalSection
 EndGlobal
