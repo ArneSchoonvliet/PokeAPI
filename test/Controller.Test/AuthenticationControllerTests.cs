@@ -1,13 +1,11 @@
-using System;
 using System.Threading.Tasks;
-using BLL.Authentication;
 using BLL.Authentication.Interfaces;
 using BLL.Authentication.ViewModels;
-using BLL.Test.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using PokeAPI.Controllers;
+using Shared.Test.Helpers;
 
 namespace Controller.Test
 {

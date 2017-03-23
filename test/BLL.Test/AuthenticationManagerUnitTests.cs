@@ -4,7 +4,6 @@ using BLL.Authentication;
 using BLL.Authentication.Interfaces;
 using BLL.Authentication.Options;
 using BLL.Authentication.ViewModels;
-using BLL.Test.Helpers;
 using DAL.DbContext;
 using DAL.DbContext.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shared.Test.Helpers;
 
 namespace BLL.Test
 {

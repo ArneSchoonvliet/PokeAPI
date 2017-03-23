@@ -1,10 +1,10 @@
-﻿using BLL.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BLL.Exceptions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BLL.Test.Helpers
+namespace Shared.Test.Helpers
 {
     public sealed class ExpectedUserActionException : ExpectedExceptionBaseAttribute
     {
