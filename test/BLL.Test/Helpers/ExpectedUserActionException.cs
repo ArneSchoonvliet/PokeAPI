@@ -1,6 +1,7 @@
 ﻿using BLL.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BLL.Test.Helpers
@@ -8,17 +9,17 @@ namespace BLL.Test.Helpers
     public sealed class ExpectedUserActionException : ExpectedExceptionBaseAttribute
     {
         private readonly string _expectedExceptionMessage;
-        private readonly string _expectedExceptionError;
+        private readonly string[] _expectedExceptionErrors;
 
         public ExpectedUserActionException(string expectedExceptionMessage)
         {
             _expectedExceptionMessage = expectedExceptionMessage;
         }
 
-        public ExpectedUserActionException(string expectedExceptionMessage, string expectedExceptionError)
+        public ExpectedUserActionException(string expectedExceptionMessage, params string[] expectedExceptionError)
         {
             _expectedExceptionMessage = expectedExceptionMessage;
-            _expectedExceptionError = expectedExceptionError;
+            _expectedExceptionErrors = expectedExceptionError;
         }
 
         protected override void Verify(Exception exception)
@@ -28,16 +29,16 @@ namespace BLL.Test.Helpers
 
             var userActionException = (UserActionException)exception;
 
-            if (!_expectedExceptionMessage.Length.Equals(0))
+            if (!string.IsNullOrEmpty(_expectedExceptionMessage))
             {
                 Assert.IsTrue(userActionException.Message.Contains(_expectedExceptionMessage), "Wrong exception message was returned.");
             }
 
-            if (!_expectedExceptionError.Length.Equals(0))
+            if (_expectedExceptionErrors.Length > 0)
             {
-                var keys = userActionException.Errors.Keys.Cast<string>().ToList();
-                var doesKeyIncludeError = keys.Any(k => k.ToLower().Contains(_expectedExceptionError.ToLower()));
-                Assert.IsTrue(doesKeyIncludeError, "Exception doesn't contain the correct error.");
+                var errors = userActionException.Errors.Values.Cast<IEnumerable<string>>().SelectMany(e => e).ToList();
+                var doesErrosIncludeExpcetedError = _expectedExceptionErrors.All(expected => errors.Any(k => k.ToLower().Contains(expected.ToLower())));
+                Assert.IsTrue(doesErrosIncludeExpcetedError, "Exception doesn't contain the correct error.");
             }
         }
     }

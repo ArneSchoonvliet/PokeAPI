@@ -17,15 +17,19 @@ namespace BLL.Exceptions
 
         public UserActionException(string key, string error, string message = null) : base(message)
         {
+            var errors = new [] {error};
             Errors = new Hashtable
             {
-                { key, error }
+                { key, errors }
             };
         }
 
-        public UserActionException(IDictionary errors, string message = null) : base(message)
+        public UserActionException(string key, IEnumerable<string> errors, string message = null) : base(message)
         {
-            Errors = new Hashtable(errors);
+            Errors = new Hashtable
+            {
+                { key, errors }
+            };
         }
 
         public UserActionException(Hashtable errors, string message = null) : base(message)
@@ -34,5 +38,7 @@ namespace BLL.Exceptions
         }
 
         public override string Message => $"{base.Message} {Environment.NewLine} ERRORS: {JsonConvert.SerializeObject(Errors)}";
+
+        // TODO Add method to add message to a specific 'key'
     }
 }

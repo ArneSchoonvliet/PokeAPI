@@ -123,7 +123,7 @@ namespace BLL.Test
         }
 
         [TestMethod]
-        [ExpectedUserActionException("User Creation Failed", "PasswordRequires")]
+        [ExpectedUserActionException("User Creation Failed", "Passwords must have at least one")]
         public async Task RegisterWithInvalidPasswordShouldThrowException()
         {
             // Arrange
@@ -140,7 +140,7 @@ namespace BLL.Test
         }
 
         [TestMethod]
-        [ExpectedUserActionException("User Creation Failed", "DuplicateUserName")]
+        [ExpectedUserActionException("User Creation Failed", "User name", "is already taken.")]
         public async Task RegisterWithAlreadyExistingLoginShouldThrowException()
         {
             // Arrange
