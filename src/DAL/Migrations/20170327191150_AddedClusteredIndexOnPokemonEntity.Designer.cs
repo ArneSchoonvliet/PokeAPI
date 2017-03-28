@@ -8,9 +8,10 @@ using DAL.DbContext;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PokeContext))]
-    partial class PokeContextModelSnapshot : ModelSnapshot
+    [Migration("20170327191150_AddedClusteredIndexOnPokemonEntity")]
+    partial class AddedClusteredIndexOnPokemonEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

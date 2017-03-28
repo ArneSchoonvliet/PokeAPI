@@ -1,5 +1,4 @@
-﻿using System;
-using DAL.DbContext.Entities;
+﻿using DAL.DbContext.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -13,6 +12,17 @@ namespace DAL.DbContext
 
         }
 
+        public DbSet<Pokemon> Pokemons { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Pokemon>()
+                .HasIndex(e => e.PokedexId)
+                .IsUnique()
+                .ForSqlServerIsClustered();
+        }
     }
 
     public class PokeContextFactory : IDbContextFactory<PokeContext>
