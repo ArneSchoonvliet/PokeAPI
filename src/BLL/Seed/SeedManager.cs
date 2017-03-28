@@ -38,7 +38,7 @@ namespace BLL.Seed
             if (!await _pokeDbRepository.Any())
             {
                 var jsonResults = await RequestPokemonsFromApi();
-                var entities = _mapper.Map<List<Pokemon>>(jsonResults);
+                var entities = _mapper.Map<List<DAL.DbContext.Entities.Pokemon>>(jsonResults);
                 _pokeDbRepository.AddRange(entities);
                 await _pokeDbRepository.Save();
             }

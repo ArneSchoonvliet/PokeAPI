@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DAL.DbContext.Entities;
+using DAL.DTO;
 
 namespace DAL.DbContext.Interfaces
 {
@@ -14,8 +15,7 @@ namespace DAL.DbContext.Interfaces
         Task<bool> Any();
         Task<bool> Any(Expression<Func<Pokemon, bool>> predicate);
 
-        Task<IList<Pokemon>> GetList();
-        Task<IList<Pokemon>> GetList(Expression<Func<Pokemon, bool>> predicate);
+        Task<IList<PokemonListDto>> GetAllPokemons();
 
         Task Save();
     }

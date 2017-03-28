@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using BLL.Pokemon.Interfaces;
+using BLL.Pokemon.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +12,17 @@ namespace PokeAPI.Controllers
     [Produces("application/json")]
     public class PokeController : Controller
     {
+        private readonly IPokemonManager _pokeManager;
+
+        public PokeController(IPokemonManager pokeManager)
+        {
+            _pokeManager = pokeManager;
+        }
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<List<PokemonListViewModel>> Get()
         {
-            return new[] { "Bulbasaur", "Squirtle", "Charmender" };
+            return await _pokeManager.GetAllPokemons();
         }
 
         // GET api/values/5

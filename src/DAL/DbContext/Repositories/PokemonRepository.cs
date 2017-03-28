@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using DAL.AutoMapper;
 using DAL.DbContext.Entities;
 using DAL.DbContext.Interfaces;
+using DAL.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.DbContext.Repositories
@@ -12,11 +16,13 @@ namespace DAL.DbContext.Repositories
     public class PokemonRepository : IPokemonRepository
     {
         private readonly PokeContext _context;
+        private readonly IMapper _mapper;
         private readonly DbSet<Pokemon> _dbSet;
 
-        public PokemonRepository(PokeContext ctx)
+        public PokemonRepository(PokeContext ctx, IMapper mapper)
         {
             _context = ctx;
+            _mapper = mapper;
             _dbSet = ctx.Pokemons;
         }
 
@@ -30,14 +36,9 @@ namespace DAL.DbContext.Repositories
             return await _dbSet.AnyAsync(predicate);
         }
 
-        public async Task<IList<Pokemon>> GetList()
+        public async Task<IList<PokemonListDto>> GetAllPokemons()
         {
-            return await _dbSet.ToListAsync();
-        }
-
-        public async Task<IList<Pokemon>> GetList(Expression<Func<Pokemon, bool>> predicate)
-        {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.ProjectTo<PokemonListDto>().ToListAsync();
         }
 
         public void Add(Pokemon entity)
