@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AsyncFriendlyStackTrace" Version="1.4.1" />
+    <PackageReference Include="AutoMapper" Version="6.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.3" />

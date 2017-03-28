@@ -13,6 +13,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BLL.AutoMapper;
+using BLL.Seed;
+using BLL.Seed.Interfaces;
+using DAL.DbContext.Interfaces;
+using DAL.DbContext.Repositories;
+using DAL.Json;
+using DAL.Json.Interfaces;
 using PokeAPI.MiddleWare;
 
 namespace PokeAPI
@@ -71,8 +78,15 @@ namespace PokeAPI
                 .AddEntityFrameworkStores<PokeContext>()
                 .AddDefaultTokenProviders();
 
+            // AutoMapper        
+            services.AddMappings();
+
             // DI
             services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+            services.AddScoped<ISeedManager, SeedManager>();
+
+            services.AddScoped<IPokeApiRepository, PokeApiRepository>();
+            services.AddScoped<IPokemonRepository, PokemonRepository>();
 
             services.AddMvc();
         }
@@ -115,6 +129,9 @@ namespace PokeAPI
             });
 
             app.UseMvc();
+
+            var seeder = app.ApplicationServices.GetService<ISeedManager>();
+            seeder.Seed();
         }
     }
 }
