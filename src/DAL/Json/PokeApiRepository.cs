@@ -30,6 +30,7 @@ namespace DAL.Json
 
             var restCalls = Task.Run(() =>
             {
+                //Making id async and await the client/response doesn't work. Hence using .GetAwaiter().GetResult()
                 Parallel.ForEach(ids, id =>
                 {
                     var response = _client.GetAsync($"{url}/{id}").GetAwaiter().GetResult();
