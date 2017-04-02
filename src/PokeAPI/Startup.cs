@@ -1,6 +1,4 @@
 ﻿using System;
-using BLL.Authentication;
-using BLL.Authentication.Interfaces;
 using BLL.Authentication.Options;
 using DAL.DbContext;
 using DAL.DbContext.Entities;
@@ -13,16 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using BLL.AutoMapper;
-using BLL.Pokemon;
-using BLL.Pokemon.Interfaces;
-using BLL.Seed;
 using BLL.Seed.Interfaces;
-using DAL.AutoMapper;
-using DAL.DbContext.Interfaces;
-using DAL.DbContext.Repositories;
-using DAL.Json;
-using DAL.Json.Interfaces;
 using PokeAPI.Helpers;
 using PokeAPI.MiddleWare;
 
@@ -86,14 +75,12 @@ namespace PokeAPI
             services.AddMappings();
 
             // DI
-            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
-            services.AddScoped<ISeedManager, SeedManager>();
-            services.AddScoped<IPokemonManager, PokemonManager>();
-
-            services.AddScoped<IPokeApiRepository, PokeApiRepository>();
-            services.AddScoped<IPokemonRepository, PokemonRepository>();
+            services.AddBusinessServices();
+            services.AddDataAccessServices();
 
             services.AddMvc();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -134,6 +121,9 @@ namespace PokeAPI
             });
 
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUi();
 
             var seeder = app.ApplicationServices.GetService<ISeedManager>();
             seeder.Seed();
