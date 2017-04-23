@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\BLL\BLL.csproj" />
-    <ProjectReference Include="..\..\src\DAL\DAL.csproj" />
+    <ProjectReference Include="..\..\src\DAL\DAL_Database.csproj" />
     <ProjectReference Include="..\Shared.Test\Shared.Test.csproj" />
   </ItemGroup>
 

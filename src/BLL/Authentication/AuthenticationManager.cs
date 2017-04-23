@@ -4,7 +4,6 @@ using BLL.Authentication.ViewModels;
 using BLL.Exceptions;
 using BLL.Extensions.Dictionary;
 using BLL.Extensions.Identity;
-using DAL.DbContext.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,6 +12,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using DAL_Database.Ef.Entities;
 
 namespace BLL.Authentication
 {

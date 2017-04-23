@@ -5,8 +5,8 @@ using BLL.Authentication;
 using BLL.Authentication.Interfaces;
 using BLL.Authentication.Options;
 using BLL.Authentication.ViewModels;
-using DAL.DbContext;
-using DAL.DbContext.Entities;
+using DAL_Database.Ef;
+using DAL_Database.Ef.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -37,10 +37,10 @@ namespace BLL.Test
 
             services.AddEntityFramework()
                 .AddEntityFrameworkInMemoryDatabase()
-                .AddDbContext<PokeContext>(options => options.UseInMemoryDatabase());
+                .AddDbContext<EfContext>(options => options.UseInMemoryDatabase());
 
             services.AddIdentity<User, IdentityRole>()
-                 .AddEntityFrameworkStores<PokeContext>(); ;
+                 .AddEntityFrameworkStores<EfContext>();
 
             var serviceProvider = services.BuildServiceProvider();
 

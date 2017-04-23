@@ -1,13 +1,13 @@
 ﻿using System;
+using DAL_Database.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using DAL.DbContext;
 
-namespace DAL.Migrations
+namespace DAL_Database.Migrations
 {
-    [DbContext(typeof(PokeContext))]
+    [DbContext(typeof(EfContext))]
     [Migration("20170327191150_AddedClusteredIndexOnPokemonEntity")]
     partial class AddedClusteredIndexOnPokemonEntity
     {

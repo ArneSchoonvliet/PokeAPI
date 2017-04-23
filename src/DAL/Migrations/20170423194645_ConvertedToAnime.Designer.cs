@@ -1,15 +1,16 @@
 ﻿using System;
-using DAL_Database.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using DAL_Database.Ef;
+using DAL_Database.Ef.Enums;
 
-namespace  DAL_Database.Migrations
+namespace DAL_Database.Migrations
 {
     [DbContext(typeof(EfContext))]
-    [Migration("20170314213915_Initial")]
-    partial class Initial
+    [Migration("20170423194645_ConvertedToAnime")]
+    partial class ConvertedToAnime
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -17,7 +18,7 @@ namespace  DAL_Database.Migrations
                 .HasAnnotation("ProductVersion", "1.1.1")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DAL.DbContext.Entities.User", b =>
+            modelBuilder.Entity("DAL_Database.Ef.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -34,7 +35,11 @@ namespace  DAL_Database.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FirstName");
+
                     b.Property<DateTime>("LastLogin");
+
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -69,6 +74,30 @@ namespace  DAL_Database.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("DAL_Database.Ef.Entities.UserAnime", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AnimeId");
+
+                    b.Property<int>("SeenEpisodes");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("UserRating");
+
+                    b.Property<int>("UserStatus");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAnimes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -178,6 +207,13 @@ namespace  DAL_Database.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("DAL_Database.Ef.Entities.UserAnime", b =>
+                {
+                    b.HasOne("DAL_Database.Ef.Entities.User", "User")
+                        .WithMany("MyAnimes")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
@@ -188,7 +224,7 @@ namespace  DAL_Database.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("DAL.DbContext.Entities.User")
+                    b.HasOne("DAL_Database.Ef.Entities.User")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -196,7 +232,7 @@ namespace  DAL_Database.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("DAL.DbContext.Entities.User")
+                    b.HasOne("DAL_Database.Ef.Entities.User")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -209,7 +245,7 @@ namespace  DAL_Database.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DAL.DbContext.Entities.User")
+                    b.HasOne("DAL_Database.Ef.Entities.User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
