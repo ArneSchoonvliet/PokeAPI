@@ -3,6 +3,7 @@ using System.Text;
 using API.Helpers;
 using API.Middleware;
 using BLL.Authentication.Options;
+using DAL_Database.Constants;
 using DAL_Database.Ef;
 using DAL_Database.Ef.Entities;
 using Microsoft.AspNetCore.Builder;
@@ -61,9 +62,8 @@ namespace API
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
 
-            //TODO Move this to DAL and place connection string in config file
-            const string connection = @"Server=(localdb)\mssqllocaldb;Database=AnimeApi;Trusted_Connection=True;";
-            services.AddDbContext<EfContext>(options => options.UseSqlServer(connection));
+            // Add EF context to DI pipeline
+            services.AddDbContext<EfContext>(options => options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringContants.ApiConnectionString)));
 
             // Add Identity membership system
             // This is the default 'login' / 'user' managment system in AspNet 
@@ -75,6 +75,7 @@ namespace API
             services.AddMappings();
 
             // DI
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddBusinessServices();
             services.AddDataAccessServices();
 
@@ -92,7 +93,7 @@ namespace API
             // Add logging to output window in dev mode
             if (env.IsDevelopment())
             {
-                loggerFactory.AddDebug();
+                // loggerFactory.AddDebug();
             }
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
