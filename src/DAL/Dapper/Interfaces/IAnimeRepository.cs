@@ -7,6 +7,6 @@ namespace DAL_Database.Dapper.Interfaces
     public interface IAnimeRepository
     {
         Task<Anime> GetAnimeById(int id);
-        Task<IList<SearchAnime>> SearchForAnime(string keyword, int pageSize, int pageIndex = 0);
+        Task<IList<SearchAnime>> SearchForAnime(string keyword, int pageSize, int pageIndex);
     }
 }

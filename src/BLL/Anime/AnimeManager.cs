@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BLL.Anime.Interfaces;
@@ -32,6 +34,16 @@ namespace BLL.Anime
             _logger.LogTrace($"Successfully retrieve {anime.EnglishTitle ?? anime.OriginalTitle}");
 
             return anime;
+        }
+
+        public async Task<List<DAL_Database.DTO.SearchAnime>> SearchByKeyword(string keyword, int pageIndex)
+        {
+            keyword = keyword.ToLower();
+            _logger.LogTrace($"Searching for an anime with keyword: {keyword}. Will use pageIndex: {pageIndex}!");
+
+            var animeSearchList = await _animeRepository.SearchForAnime(keyword: keyword, pageSize: 25, pageIndex: pageIndex);
+
+            return animeSearchList.ToList();
         }
     }
 }

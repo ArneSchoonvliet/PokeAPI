@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BLL.Anime.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,11 +33,12 @@ namespace API.Controllers
         /// Search for anime titles 
         /// </summary>
         /// <param name="query">Search query to find anime titles</param>
+        /// <param name="page">Index used for pagination</param>
         /// <returns>List of animes containing the query in their title</returns>
-        //[HttpGet("search/{query}")]
-        //public async Task<List<PokemonListViewModel>> Search(string query)
-        //{
-        //    return new List<PokemonListViewModel>();
-        //}
+        [HttpGet("search/{query}")]
+        public async Task<IActionResult> Search(string query, int page = 0)
+        {
+            return Ok(await _animeManager.SearchByKeyword(query, page));
+        }
     }
 }
