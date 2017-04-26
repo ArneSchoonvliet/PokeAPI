@@ -1,21 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
 using DAL_Database.Dapper.Helpers;
-using DAL_Database.Dapper.Interfaces;
+using DAL_Database.Dapper.Queries;
 using DAL_Database.DTO;
 using Microsoft.Extensions.Configuration;
 
-namespace DAL_Database.Dapper.Repositories
+namespace DAL_Database.Dapper.QueryHandlers
 {
-    public class AnimeRepository : BaseRepository, IAnimeRepository
+    public class AnimeQueryHandler : BaseQueryHandler<AnimeQuery, Anime>
     {
-        public AnimeRepository(IConfiguration configuration) : base(configuration)
+        public AnimeQueryHandler(IConfiguration configuration) : base(configuration)
         {
         }
 
-        public async Task<Anime> GetAnimeById(int id)
+        public override async Task<Anime> Handle(AnimeQuery message)
         {
             using (var dbConnection = Connection)
             {
@@ -44,31 +42,8 @@ namespace DAL_Database.Dapper.Repositories
                                             INNER JOIN Genres on AnimeGenres.GenreId = Genres.Id 
                                             WHERE [Anime].Id = @Id";
 
-                var anime = await dbConnection.QueryParentChildAsync<Anime, string, int>(sql, a => a.Id, a => a.Genres, new {Id = id}, splitOn:"Name");
+                var anime = await dbConnection.QueryParentChildAsync<Anime, string, int>(sql, a => a.Id, a => a.Genres, new { Id = message.Id }, splitOn: "Name");
                 return anime.SingleOrDefault();
-            }
-        }
-
-        public async Task<IList<SearchAnime>> SearchForAnime(string keyword, int pageSize, int pageIndex)
-        {
-            using (var dbConnection = Connection)
-            {
-                await dbConnection.OpenAsync();
-                const string sql = @"SELECT [Anime].[Id],
-                                            [Anime].[AverageRating],
-                                            [Anime].[ShowType],
-                                            [Anime].[StartDate],
-                                            [Anime].[EndDate],
-                                            [Anime].[EnglishTitle],
-                                            [Anime].[OriginalTitle]
-                                            FROM Anime 
-                                            WHERE CHARINDEX(@Keyword, OriginalTitle) > 0 OR CHARINDEX(@Keyword, EnglishTitle) > 0
-                                            ORDER BY [Anime].[UserCount] DESC
-                                            OFFSET @PageIndex ROWS
-                                            FETCH NEXT @PageSize ROWS ONLY";
-
-                var animeSearchList = await dbConnection.QueryAsync<SearchAnime>(sql, new {Keyword = keyword, PageIndex = pageIndex, PageSize = pageSize});
-                return animeSearchList.ToList();
             }
         }
     }

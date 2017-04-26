@@ -2,10 +2,10 @@
 using BLL.Anime.Interfaces;
 using BLL.Authentication;
 using BLL.Authentication.Interfaces;
-using DAL_Database.Dapper.Interfaces;
-using DAL_Database.Dapper.Repositories;
+using DAL_Database.Dapper.QueryHandlers;
 using DAL_Database.Ef.Interfaces;
 using DAL_Database.Ef.Repositories;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Helpers
@@ -24,8 +24,12 @@ namespace API.Helpers
         // Register your data access services here
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services)
         {
+            // Mediator
+            services.AddMediatR();
+
             // Dapper
-            services.AddScoped<IAnimeRepository, AnimeRepository>();
+            services.AddScoped<AnimeQueryHandler, AnimeQueryHandler>();
+            services.AddScoped<SearchAnimeQueryHandler, SearchAnimeQueryHandler>();
 
             // Ef
             services.AddScoped<IUserAnimeRepository, UserAnimeRepository>();
